@@ -7,7 +7,6 @@ import urllib.request
 import os
 import sys
 from bs4 import BeautifulSoup
-import cfscrape
 
 
 try: # se si è sotto linux scapy (per l'attacco tcp-udp) funziona
