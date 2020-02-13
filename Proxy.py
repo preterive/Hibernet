@@ -591,10 +591,10 @@ def main(): # funzione effettiva del programma.
 		for position, url in enumerate(foxtools): # per ogni url starta la funzione apposita
 			proxyget(url)
 		print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines())))
+        exit(0)
 
 		proxylist() # dopo esegue questa funzione che setta meglio la lista
+if __name__ == '__main__':
 
-
-
-
-main()
+	while True:
+        main()
