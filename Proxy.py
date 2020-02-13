@@ -525,76 +525,37 @@ def proxylist(): # funzione per la creazione della proxylist
 	print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines()))) # per vedere quante lines (e quindi quanti proxy) ci sono nel file
 	print ("\nProxylist Updated!\n")
 
-def proxycheckerinit():
-	global out_file
-	candidate_proxies = open("proxies.txt").readlines() # vede gli attuali proxy "candidati" lol
-	filedl = open("proxies.txt", "w") # prima cancella contenuto
-	filedl.close()
-	out_file = open("proxies.txt", "a") # e poi lo apre non in riscrivibile
-	threads = [] # crea una lista che ci servirà dopo
-	for i in candidate_proxies:
-		t = threading.Thread(target=proxychecker, args=[i]) # crea un thread per proxy per velocizzare
-		t.start() # e lo avvia
-		threads.append(t) # e lo inserisce nella lista precedente
-
-	for t in threads: # per tutti i threads che hanno finito il loro lavoro,
-		t.join()      # questo li fa aspettare che tutti abbiano finito
-
-	out_file.close()  # chiude il file precedentemente aperto
-	print("\n\nCurrent IPs in proxylist: %s\n" % (len(open("proxies.txt").readlines()))) # quando finisce tutto printa la quantità di proxy FINALE
-
-def proxychecker(i):
-	proxy = 'http://' + i
-	proxy_support = urllib.request.ProxyHandler({'http' : proxy}) # compone la richiesta con il proxy
-	opener = urllib.request.build_opener(proxy_support)
-	urllib.request.install_opener(opener)
-	req = urllib.request.Request(("http://www.google.com"))			# compone la richiesta a google
-	req.add_header("User-Agent", random.choice(useragents))			# aggiunge useragent random per fare sembrare più realistica la req
-	try:
-		urllib.request.urlopen(req, timeout=60)						# apre il sito
-		print ("%s works!\n\n" % proxy) # se funziona printa "it works"
-		out_file.write(i)				# e lo scrive nel file.
-	except:
-		print ("%s does not respond.\n\n" % proxy) # altrimenti dice che non risponde
 
 
-def main(): # funzione effettiva del programma.
-	try:
-		out_file = open("proxies.txt","w") # prima di tutto cancella il contenuto di proxy.txt
-		out_file.close()
+out_file = open("proxies.txt","w") # prima di tutto cancella il contenuto di proxy.txt
+out_file.close()
 
-		print ("\nDownloading from free-proxy-list in progress...")
-		url = "http://free-proxy-list.net/"
-		proxyget2(url) # manda url alla funzione
-		url = "https://www.us-proxy.org/"
-		proxyget2(url)
-		print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines()))) # printa la lunghezza attuale del file, che sarebbe il numero di proxy
+print ("\nDownloading from free-proxy-list in progress...")
+url = "http://free-proxy-list.net/"
+proxyget2(url) # manda url alla funzione
+url = "https://www.us-proxy.org/"
+proxyget2(url)
+print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines()))) # printa la lunghezza attuale del file, che sarebbe il numero di proxy
 
-		print ("\nDownloading from blogspot in progress...\n")
-		url = "http://www.proxyserverlist24.top/"
-		word = "post-title entry-title"
-		word2 = "h3"
-		blogspotget(url,word, word2) # manda url, e due variabili a blogspotget
-		url = "https://proxylistdaily4you.blogspot.com/"
-		word = "post-body entry-content"
-		word2 = "div"
-		blogspotget(url,word,word2)
-		print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines())))
+print ("\nDownloading from blogspot in progress...\n")
+url = "http://www.proxyserverlist24.top/"
+word = "post-title entry-title"
+word2 = "h3"
+blogspotget(url,word, word2) # manda url, e due variabili a blogspotget
+url = "https://proxylistdaily4you.blogspot.com/"
+word = "post-body entry-content"
+word2 = "div"
+blogspotget(url,word,word2)
+print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines())))
 
-		print ("\nDownloading from various mirrors in progress...")
-		for position, url in enumerate(nurls):
-			proxyget(url)
-			print("Completed downloads: (%s/%s)\nCurrent IPs in proxylist: %s" % (position+1, len(nurls), len(open("proxies.txt").readlines())))
+print ("\nDownloading from various mirrors in progress...")
+for position, url in enumerate(nurls):
+	proxyget(url)
+	print("Completed downloads: (%s/%s)\nCurrent IPs in proxylist: %s" % (position+1, len(nurls), len(open("proxies.txt").readlines())))
 
-		print ("\nDownloading from foxtools in progress...")
-		foxtools = ['http://api.foxtools.ru/v2/Proxy.txt?page=%d' % n for n in range(1, 6)] # per prendere ip di tutte e 6 le pagine
-		for position, url in enumerate(foxtools): # per ogni url starta la funzione apposita
-			proxyget(url)
-		print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines())))
-        exit(0)
-
-		proxylist() # dopo esegue questa funzione che setta meglio la lista
-if __name__ == '__main__':
-
-	while True:
-        main()
+print ("\nDownloading from foxtools in progress...")
+foxtools = ['http://api.foxtools.ru/v2/Proxy.txt?page=%d' % n for n in range(1, 6)] # per prendere ip di tutte e 6 le pagine
+for position, url in enumerate(foxtools): # per ogni url starta la funzione apposita
+	proxyget(url)
+print("Current IPs in proxylist: %s" % (len(open("proxies.txt").readlines())))
+proxylist()
