@@ -14,7 +14,7 @@ try: # se si è sotto linux scapy (per l'attacco tcp-udp) funziona
 except: # altrimenti, se fallisce l'importazione
     print ("TCP/UDP FLOOD ARE NOT SUPPORTED UNDER THIS SYSTEM. YOU MUST USE HTTP FLOOD.") # printa questo
 
-print('example: simple_flood.py http://www.csbme.de/ n proxy.txt 800 300')
+print('example: simple_flood.py http://google.com/ n proxy.txt 800 300')
 
 useragents=["AdsBot-Google ( http://www.google.com/adsbot.html)",
             "Avant Browser/1.2.789rel1 (http://www.avantbrowser.com)",
